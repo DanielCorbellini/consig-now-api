@@ -26,7 +26,7 @@ class Condicional extends Model
 
     public function itens(): HasMany
     {
-        return $this->hasMany(CondicionalItem::class, "condicional_id");
+        return $this->hasMany(CondicionalItem::class, "condicional_id")->with('produto');
     }
 
     /**

@@ -38,6 +38,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
             // Itens da condicional
             Route::post('/{id}/itens/', [CondicionalController::class, 'addItem']);
+            Route::get('/{id}/itens/', [CondicionalController::class, 'showItens']);
         }
     );
 });

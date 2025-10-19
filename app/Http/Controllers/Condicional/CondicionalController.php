@@ -123,7 +123,7 @@ class CondicionalController extends Controller
         ], 200);
     }
 
-    public function addItem(CondicionalItemStore $request, $id)
+    public function addItem(CondicionalItemStore $request, int $id)
     {
         try {
             $condicional = $this->condicionalService->adicionarItem($id, $request->validated());
@@ -137,5 +137,22 @@ class CondicionalController extends Controller
                 'message' => $e->getMessage()
             ], 400);
         }
+    }
+
+    public function showItens(int $id)
+    {
+        $itensCondicional = $this->condicionalService->listarItensPorId($id);
+
+        if (empty($itensCondicional)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Condicional não encontrada'
+            ], 404);
+        }
+
+        return response()->json([
+            'success' => true,
+            'condicional' => $itensCondicional
+        ], 200);
     }
 }

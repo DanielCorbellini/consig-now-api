@@ -22,6 +22,12 @@ class CondicionalService
         return Condicional::find($id);
     }
 
+    public function listarItensPorId(int $id)
+    {
+        $condicional = Condicional::find($id);
+        return $condicional->itens;
+    }
+
     public function editar(int $id, array $data): ?Condicional
     {
         $condicional = Condicional::find($id);
