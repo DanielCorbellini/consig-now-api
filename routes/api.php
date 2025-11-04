@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Produto\ProdutoController;
 use App\Http\Controllers\Condicional\CondicionalController;
+use App\Http\Controllers\Vendas\VendasController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -39,6 +40,20 @@ Route::middleware('auth:sanctum')->group(function () {
             // Itens da condicional
             Route::post('/{id}/itens/', [CondicionalController::class, 'addItem']);
             Route::get('/{id}/itens/', [CondicionalController::class, 'showItens']);
+        }
+    );
+
+    Route::prefix("vendas")->group(
+        function () {
+            Route::post('/', [VendasController::class, 'store']);
+            Route::get('/', [VendasController::class, 'index']);
+            Route::get('/{id}', [VendasController::class, 'show']);
+            Route::delete('/{id}', [VendasController::class, 'destroy']);
+            Route::put('/{id}', [VendasController::class, 'update']);
+
+            // Itens da venda
+            Route::post('/{id}/itens/', [VendasController::class, 'addItem']);
+            Route::get('/{id}/itens/', [VendasController::class, 'showItens']);
         }
     );
 });
