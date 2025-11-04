@@ -63,7 +63,6 @@ class CondicionalService
         ]);
 
         // Aqui botar a lógica para movimentação de estoque
-
         return $condicional->load('itens.produto');
     }
 }

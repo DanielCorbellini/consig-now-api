@@ -99,7 +99,7 @@ class CondicionalController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => $condicional
+            'condicional' => $condicional
         ], 200);
     }
 

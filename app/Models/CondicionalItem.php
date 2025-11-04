@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class CondicionalItem extends Model
 {
+    protected $table = "condicional_itens";
+
     protected $fillable = [
         'condicional_id',
         'produto_id',
@@ -15,11 +17,9 @@ class CondicionalItem extends Model
         'quantidade_vendida',
     ];
 
-    protected $table = "condicional_itens";
-
     public function condicional(): BelongsTo
     {
-        return $this->belongsTo(Condicional::class, 'condicional_id');
+        return $this->belongsTo(Condicional::class, 'id');
     }
 
     public function produto(): BelongsTo
