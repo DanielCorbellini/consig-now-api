@@ -3,9 +3,10 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AuthController;
-use App\Http\Controllers\Produto\ProdutoController;
-use App\Http\Controllers\Condicional\CondicionalController;
 use App\Http\Controllers\Vendas\VendasController;
+use App\Http\Controllers\Produto\ProdutoController;
+use App\Http\Controllers\Vendas\VendasItemController;
+use App\Http\Controllers\Condicional\CondicionalController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -39,7 +40,8 @@ Route::middleware('auth:sanctum')->group(function () {
 
             // Itens da condicional
             Route::post('/{id}/itens/', [CondicionalController::class, 'addItem']);
-            Route::get('/{id}/itens/', [CondicionalController::class, 'showItens']);
+            Route::get('/{id}/itens/', [CondicionalController::class, 'showItems']);
+            Route::put('/{id}/itens/', [CondicionalController::class, 'returnItems']);
         }
     );
 
@@ -52,8 +54,10 @@ Route::middleware('auth:sanctum')->group(function () {
             Route::put('/{id}', [VendasController::class, 'update']);
 
             // Itens da venda
-            Route::post('/{id}/itens/', [VendasController::class, 'addItem']);
-            Route::get('/{id}/itens/', [VendasController::class, 'showItens']);
+            Route::post('/{vendaId}/itens/', [VendasItemController::class, 'store']);
+            Route::delete('/{vendaId}/itens/{vendaItemId}', [VendasItemController::class, 'destroy']);
+
+            Route::get('/{vendaId}/itens/', [VendasItemController::class, 'show']);
         }
     );
 });
