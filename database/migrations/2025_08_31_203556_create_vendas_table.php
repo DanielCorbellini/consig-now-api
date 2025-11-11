@@ -18,6 +18,7 @@ return new class extends Migration
             $table->foreignId('condicional_id')->nullable()->constrained('condicionais');
             $table->dateTime('data_venda');
             $table->decimal('valor_total', 10, 2);
+            $table->enum('status', ['aberta', 'paga', 'cancelada'])->default('aberta');
             $table->enum('forma_pagamento', ['dinheiro', 'cartao', 'pix', 'outro']);
             $table->timestamps();
         });
