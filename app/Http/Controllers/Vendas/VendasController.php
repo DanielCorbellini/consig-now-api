@@ -2,13 +2,11 @@
 
 namespace App\Http\Controllers\Vendas;
 
+use App\Services\VendasService;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Vendas\VendasIndexRequest;
 use App\Http\Requests\Vendas\VendasStoreRequest;
 use App\Http\Requests\Vendas\VendasUpdateRequest;
-use App\Models\Venda;
-use App\Services\VendasService;
-use Illuminate\Http\Request;
 
 class VendasController extends Controller
 {

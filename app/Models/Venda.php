@@ -19,6 +19,15 @@ class Venda extends Model
         "forma_pagamento"
     ];
 
+    public static function boot()
+    {
+        parent::boot();
+        static::creating(function ($venda) {
+            $venda->valor_total = 0;
+            $venda->status = "aberta";
+        });
+    }
+
     // public function cliente(): BelongsTo
     // {
     //     return $this->belongsTo(Cliente::class);

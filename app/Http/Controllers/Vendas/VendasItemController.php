@@ -2,64 +2,120 @@
 
 namespace App\Http\Controllers\Vendas;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Services\VendasService;
+use App\Services\VendaItemService;
+use App\Http\Controllers\Controller;
+use Exception;
 
 class VendasItemController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
-    }
+    protected $vendaItemService;
+    protected $vendaService;
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function __construct(VendaItemService $vendaItemService, VendasService $vendaService)
     {
-        //
+        $this->vendaItemService = $vendaItemService;
+        $this->vendaService = $vendaService;
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request, int $vendaId)
     {
-        //
+        try {
+
+            $rules = [
+                'produto_id' => 'required|integer|exists:produtos,id',
+                'quantidade' => 'required|integer|min:1',
+                'preco_unitario' => 'required|numeric|min:0',
+            ];
+
+            $messages = [
+                'produto_id.required' => 'O campo produto_id é obrigatório.',
+                'produto_id.integer' => 'O campo produto_id deve ser um número inteiro.',
+                'produto_id.exists' => 'O produto especificado não existe.',
+                'quantidade.required' => 'O campo quantidade é obrigatório.',
+                'quantidade.integer' => 'O campo quantidade deve ser um número inteiro.',
+                'quantidade.min' => 'A quantidade mínima é 1.',
+                'preco_unitario.required' => 'O campo preco_unitario é obrigatório.',
+                'preco_unitario.numeric' => 'O campo preco_unitario deve ser um número.',
+                'preco_unitario.min' => 'O preço unitário mínimo é 0.',
+            ];
+
+            $request->validate($rules, $messages);
+
+            $item = $this->vendaItemService->adicionar($vendaId, $request->all());
+
+            if (!$item) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Erro ao adicionar item à venda'
+                ], 500);
+            }
+
+            return response()->json([
+                'success' => true,
+                'data' => $item
+            ], 201);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage()
+            ], 500);
+        }
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(int $vendaId)
     {
-        //
-    }
+        $itens = $this->vendaItemService->listar($vendaId);
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
+        if ($itens->isEmpty()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Itens da venda não encontrados'
+            ], 404);
+        }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
+        return response()->json([
+            'success' => true,
+            'data' => $itens
+        ]);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(int $vendaId, int $vendaItemId)
     {
-        //
+        try {
+            $removido = $this->vendaItemService->remover($vendaId, $vendaItemId);
+
+            if (!$removido) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Erro ao remover item da venda'
+                ], 404);
+            }
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Item removido da venda com sucesso'
+            ]);
+        } catch (Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage()
+            ], 500);
+        }
     }
+
+    // Venda está ligada com uma consignação, não vender mais itens do que a consignação possui (feito)
+    // a movimentação do estoque está ligada a consignação, não a venda (fazer)
+    // Estoque deve ser controlado pelo campo quantidade_entregue e quantidade_devolvida de condicionalItem.
+    // FAzer um middleware ou direto em CondicionalItemService?
 }

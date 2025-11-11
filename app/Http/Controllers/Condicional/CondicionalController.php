@@ -123,6 +123,10 @@ class CondicionalController extends Controller
         ], 200);
     }
 
+    /**
+     * adicionar movimentação de estoque ao adicionar item baseado no quantidade_entregue
+     * colocar valor padrão em quantidade_devolvida como 0
+     */
     public function addItem(CondicionalItemStore $request, int $id)
     {
         try {
@@ -139,7 +143,7 @@ class CondicionalController extends Controller
         }
     }
 
-    public function showItens(int $id)
+    public function showItems(int $id)
     {
         $itensCondicional = $this->condicionalService->listarItensPorId($id);
 
@@ -154,5 +158,27 @@ class CondicionalController extends Controller
             'success' => true,
             'condicional' => $itensCondicional
         ], 200);
+    }
+
+    public function returnItems(Request $request, int $id)
+    {
+        // $request->validate([
+        //     'itens' => 'required|array',
+        //     'itens.*.produto_id' => 'required|integer|exists:produtos,id',
+        //     'itens.*.quantidade_devolvida' => 'required|integer|min:1',
+        // ]);
+
+        // try {
+        //     $condicional = $this->condicionalService->devolverItens($id, $request->input('itens'));
+
+        //     return response()->json([
+        //         'message' => 'Itens devolvidos com sucesso!',
+        //         'condicional' => $condicional
+        //     ], 200);
+        // } catch (\Exception $e) {
+        //     return response()->json([
+        //         'message' => $e->getMessage()
+        //     ], 400);
+        // }
     }
 }

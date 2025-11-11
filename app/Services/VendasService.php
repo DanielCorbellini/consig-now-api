@@ -3,7 +3,6 @@
 namespace App\Services;
 
 use App\Models\Venda;
-use Faker\Test\Provider\Collection;
 
 class VendasService
 {

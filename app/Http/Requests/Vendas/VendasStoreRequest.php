@@ -26,7 +26,6 @@ class VendasStoreRequest extends FormRequest
             'cliente_id'       => ['required', 'integer', 'exists:clientes,id'],
             'condicional_id'   => ['required', 'integer', 'exists:condicionais,id'],
             'data_venda'      => ['required', 'date'],
-            'valor_total'     => ['required', 'numeric', 'min:0'],
             'forma_pagamento'  => ['required', 'string', 'in:dinheiro,cartao,pix,outro'],
         ];
     }
