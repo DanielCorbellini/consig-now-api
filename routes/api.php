@@ -7,6 +7,8 @@ use App\Http\Controllers\Vendas\VendasController;
 use App\Http\Controllers\Produto\ProdutoController;
 use App\Http\Controllers\Vendas\VendasItemController;
 use App\Http\Controllers\Condicional\CondicionalController;
+use App\Http\Controllers\Almoxarifado\AlmoxarifadoController;
+use App\Http\Controllers\Estoque\EstoqueController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -58,6 +60,24 @@ Route::middleware('auth:sanctum')->group(function () {
             Route::delete('/{vendaId}/itens/{vendaItemId}', [VendasItemController::class, 'destroy']);
 
             Route::get('/{vendaId}/itens/', [VendasItemController::class, 'show']);
+        }
+    );
+
+    Route::prefix("almoxarifados")->group(
+        function () {
+            Route::post('/', [AlmoxarifadoController::class, 'store']);
+            Route::get('/', [AlmoxarifadoController::class, 'index']);
+            Route::get('/{id}', [AlmoxarifadoController::class, 'show']);
+            Route::delete('/{id}', [AlmoxarifadoController::class, 'destroy']);
+        }
+    );
+
+    Route::prefix("estoques")->group(
+        function () {
+            Route::post('/', [EstoqueController::class, 'store']);
+            Route::get('/', [EstoqueController::class, 'index']);
+            Route::get('/{id}', [EstoqueController::class, 'show']);
+            Route::delete('/{id}', [EstoqueController::class, 'destroy']);
         }
     );
 });
