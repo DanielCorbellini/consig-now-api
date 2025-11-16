@@ -26,6 +26,7 @@ class CondicionalStoreRequest extends FormRequest
             'data_entrega' => 'required|date',
             'data_prevista_retorno' => 'required|date|after_or_equal:data_entrega',
             'status' => 'required|in:aberta,finalizada,em_cobranca',
+            'almoxarifado_id' => 'required|integer|exists:almoxarifados,id',
         ];
     }
 

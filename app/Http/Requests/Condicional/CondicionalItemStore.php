@@ -33,8 +33,8 @@ class CondicionalItemStore extends FormRequest
                 }),
             ],
             'quantidade_entregue' => 'required|integer|min:1',
-            'quantidade_devolvida' => 'required|integer|lte:quantidade_entregue',
-            'quantidade_vendida' => 'required|integer|lte:quantidade_entregue',
+            'quantidade_devolvida' => 'nullable|integer|lte:quantidade_entregue',
+            'quantidade_vendida' => 'nullable|integer|lte:quantidade_entregue',
         ];
     }
 
@@ -50,12 +50,10 @@ class CondicionalItemStore extends FormRequest
             'quantidade_entregue.integer' => 'O campo quantidade_entregue deve ser um número inteiro.',
             'quantidade_entregue.min' => 'O campo quantidade_entregue deve ser no mínimo 1.',
 
-            'quantidade_devolvida.required' => 'O campo quantidade_devolvida é obrigatório.',
             'quantidade_devolvida.integer' => 'O campo quantidade_devolvida deve ser um número inteiro.',
             'quantidade_devolvida.lte' => 'O campo quantidade_devolvida deve ser menor ou igual a quantidade_entregue.',
             'quantidade_devolvida.min' => 'O campo quantidade_devolvida deve ser no mínimo 0',
 
-            'quantidade_vendida.required' => 'O campo quantidade_vendida é obrigatório.',
             'quantidade_vendida.integer' => 'O campo quantidade_vendida deve ser um número inteiro.',
             'quantidade_vendida.lte' => 'O campo quantidade_vendida deve ser menor ou igual a quantidade_entregue.',
             'quantidade_entregue.min' => 'O campo quantidade_entregue deve ser no mínimo 0'

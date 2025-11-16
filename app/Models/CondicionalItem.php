@@ -17,6 +17,16 @@ class CondicionalItem extends Model
         'quantidade_vendida',
     ];
 
+    public static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($item) {
+            $item->quantidade_devolvida = 0;
+            $item->quantidade_vendida = 0;
+        });
+    }
+
     public function condicional(): BelongsTo
     {
         return $this->belongsTo(Condicional::class, 'id');

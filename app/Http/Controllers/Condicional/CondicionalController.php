@@ -162,23 +162,37 @@ class CondicionalController extends Controller
 
     public function returnItems(Request $request, int $id)
     {
-        // $request->validate([
-        //     'itens' => 'required|array',
-        //     'itens.*.produto_id' => 'required|integer|exists:produtos,id',
-        //     'itens.*.quantidade_devolvida' => 'required|integer|min:1',
-        // ]);
+        $rules = [
+            'item_id' => 'required|integer|exists:condicional_itens,id',
+            'quantidade' => 'required|integer|min:1',
+        ];
 
-        // try {
-        //     $condicional = $this->condicionalService->devolverItens($id, $request->input('itens'));
+        $message = [
+            'item_id.required' => 'O campo item_id é obrigatório.',
+            'item_id.integer' => 'O campo item_id deve ser um número inteiro.',
+            'item_id.exists' => 'O item especificado não existe na condicional.',
+            'quantidade.required' => 'O campo quantidade é obrigatório.',
+            'quantidade.integer' => 'O campo quantidade deve ser um número inteiro.',
+            'quantidade.min' => 'A quantidade mínima para devolução é 1.',
+        ];
 
-        //     return response()->json([
-        //         'message' => 'Itens devolvidos com sucesso!',
-        //         'condicional' => $condicional
-        //     ], 200);
-        // } catch (\Exception $e) {
-        //     return response()->json([
-        //         'message' => $e->getMessage()
-        //     ], 400);
-        // }
+        $request->validate($rules, $message);
+
+        try {
+            $condicional = $this->condicionalService->devolverItem(
+                $id,
+                $request->input('item_id'),
+                $request->input('quantidade')
+            );
+
+            return response()->json([
+                'message' => 'Item devolvido com sucesso!',
+                'condicional' => $condicional
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => $e->getMessage()
+            ], 400);
+        }
     }
 }

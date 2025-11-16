@@ -14,6 +14,7 @@ class Condicional extends Model
         "representante_id",
         "data_entrega",
         "data_prevista_retorno",
+        "almoxarifado_id",
         "status",
     ];
 
@@ -27,6 +28,11 @@ class Condicional extends Model
     public function itens(): HasMany
     {
         return $this->hasMany(CondicionalItem::class, "condicional_id")->with('produto');
+    }
+
+    public function almoxarifado(): BelongsTo
+    {
+        return $this->belongsTo(Almoxarifado::class, 'almoxarifado_id');
     }
 
     /**
