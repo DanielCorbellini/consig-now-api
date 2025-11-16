@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('representante_id')->constrained('representantes');
             $table->date('data_entrega');
             $table->date('data_prevista_retorno')->nullable();
+            $table->foreignId('almoxarifado_id')->nullable()->constrained('almoxarifados');
             $table->enum('status', ['aberta', 'finalizada', 'em_cobranca'])->default('aberta');
             $table->timestamps();
         });

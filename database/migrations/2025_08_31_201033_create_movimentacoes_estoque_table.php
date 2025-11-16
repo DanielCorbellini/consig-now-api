@@ -18,11 +18,11 @@ return new class extends Migration
             // Podemos verificar esta logica no backend
             $table->foreignId('almox_origem_id')->nullable()->constrained('almoxarifados');
             $table->foreignId('almox_destino_id')->nullable()->constrained('almoxarifados');
-            $table->enum('tipo', ['entrada', 'saida', 'transferencia', 'ajuste', 'devolucao', 'consignação']);
+            // $table->enum('tipo', ['entrada', 'saida', 'transferencia', 'ajuste', 'devolucao', 'consignação']);
             $table->integer('quantidade');
             $table->foreignId('user_id')->nullable()->constrained('users');
             // Ver esta coluna
-            $table->morphs('referencia'); // para vincular condicional, venda, nota etc
+            $table->foreignId('condicional_id')->constrained('condicionais');
             $table->timestamps();
         });
     }
