@@ -4,17 +4,21 @@ namespace App\Http\Controllers\Vendas;
 
 use App\Services\VendasService;
 use App\Http\Controllers\Controller;
+use App\Services\CondicionalService;
 use App\Http\Requests\Vendas\VendasIndexRequest;
 use App\Http\Requests\Vendas\VendasStoreRequest;
 use App\Http\Requests\Vendas\VendasUpdateRequest;
+use Exception;
 
 class VendasController extends Controller
 {
     protected $vendasService;
+    protected $condicionalService;
 
-    public function __construct(VendasService $vendasService)
+    public function __construct(VendasService $vendasService, CondicionalService $condicionalService)
     {
         $this->vendasService = $vendasService;
+        $this->condicionalService = $condicionalService;
     }
 
     /**
@@ -44,6 +48,16 @@ class VendasController extends Controller
     public function store(VendasStoreRequest $request)
     {
         $validatedSellings = $request->validated();
+
+        $condicional = $this->condicionalService->listarPorId($validatedSellings['condicional_id']);
+
+        if ($condicional->status === 'finalizada') {
+            return response()->json([
+                'success' => false,
+                'message' => 'A condicional está finalizada.'
+            ], 400);
+        }
+
         $venda = $this->vendasService->criar($validatedSellings);
 
         if (!$venda) {
@@ -119,5 +133,30 @@ class VendasController extends Controller
             'success' => true,
             'message' => 'Venda deletada com sucesso!'
         ], 200);
+    }
+
+
+    public function endSale(int $vendaId)
+    {
+        try {
+
+            $finalizada = $this->vendasService->encerrarVenda($vendaId);
+
+            if (!$finalizada) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Erro ao finalizar a venda'
+                ], 404);
+            }
+            return response()->json([
+                'success' => true,
+                'message' => 'Venda finalizada com sucesso'
+            ]);
+        } catch (Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage()
+            ], 500);
+        }
     }
 }

@@ -46,6 +46,15 @@ class VendasItemController extends Controller
 
             $request->validate($rules, $messages);
 
+            $venda = $this->vendaService->listarPorId($vendaId);
+
+            if ($venda->status === 'paga') {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'A venda está finalizada, não aceitando mais itens.'
+                ], 500);
+            }
+
             $item = $this->vendaItemService->adicionar($vendaId, $request->all());
 
             if (!$item) {
@@ -113,9 +122,4 @@ class VendasItemController extends Controller
             ], 500);
         }
     }
-
-    // Venda está ligada com uma consignação, não vender mais itens do que a consignação possui (feito)
-    // a movimentação do estoque está ligada a consignação, não a venda (fazer)
-    // Estoque deve ser controlado pelo campo quantidade_entregue e quantidade_devolvida de condicionalItem.
-    // FAzer um middleware ou direto em CondicionalItemService?
 }

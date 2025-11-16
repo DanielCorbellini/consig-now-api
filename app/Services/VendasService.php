@@ -64,4 +64,18 @@ class VendasService
         // // Aqui botar a lógica para movimentação de estoque
         // return $venda->load('itens.produto');
     }
+
+    public function encerrarVenda(int $vendaId): ?Venda
+    {
+        $venda = Venda::find($vendaId);
+
+        if (!$venda) {
+            throw new \Exception("Venda não encontrada.");
+        }
+
+        $venda->status = 'paga';
+        $venda->save();
+
+        return $venda->fresh(['condicional', 'condicional.representante', 'itens']);
+    }
 }

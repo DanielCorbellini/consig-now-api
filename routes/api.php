@@ -43,7 +43,7 @@ Route::middleware('auth:sanctum')->group(function () {
             // Itens da condicional
             Route::post('/{id}/itens/', [CondicionalController::class, 'addItem']);
             Route::get('/{id}/itens/', [CondicionalController::class, 'showItems']);
-            Route::put('/{id}/itens/', [CondicionalController::class, 'returnItems']);
+            Route::put('/{id}/itens/devolver', [CondicionalController::class, 'returnItems']);
         }
     );
 
@@ -54,6 +54,7 @@ Route::middleware('auth:sanctum')->group(function () {
             Route::get('/{id}', [VendasController::class, 'show']);
             Route::delete('/{id}', [VendasController::class, 'destroy']);
             Route::put('/{id}', [VendasController::class, 'update']);
+            Route::put('/{id}/finalizar', [VendasController::class, 'endSale']);
 
             // Itens da venda
             Route::post('/{vendaId}/itens/', [VendasItemController::class, 'store']);
