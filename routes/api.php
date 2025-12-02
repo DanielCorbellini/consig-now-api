@@ -44,6 +44,8 @@ Route::middleware('auth:sanctum')->group(function () {
             Route::post('/{id}/itens/', [CondicionalController::class, 'addItem']);
             Route::get('/{id}/itens/', [CondicionalController::class, 'showItems']);
             Route::put('/{id}/itens/devolver', [CondicionalController::class, 'returnItems']);
+            Route::delete('/{id}/itens/{itemId}', [CondicionalController::class, 'removeItem']);
+            Route::put('/{id}/itens/{itemId}', [CondicionalController::class, 'updateItem']);
         }
     );
 

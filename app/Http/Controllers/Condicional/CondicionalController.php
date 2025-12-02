@@ -195,4 +195,36 @@ class CondicionalController extends Controller
             ], 400);
         }
     }
+
+    public function removeItem(int $id, int $itemId)
+    {
+        try {
+            $condicional = $this->condicionalService->removerItem($id, $itemId);
+
+            return response()->json([
+                'message' => 'Item removido com sucesso!',
+                'condicional' => $condicional
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => $e->getMessage()
+            ], 400);
+        }
+    }
+
+    public function updateItem(Request $request, int $id, int $itemId)
+    {
+        try {
+            $condicional = $this->condicionalService->editarItem($id, $itemId, $request->all());
+
+            return response()->json([
+                'message' => 'Item atualizado com sucesso!',
+                'condicional' => $condicional
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => $e->getMessage()
+            ], 400);
+        }
+    }
 }
