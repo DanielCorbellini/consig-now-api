@@ -104,4 +104,21 @@ class ProdutoController extends Controller
             'message' => 'Produto deletado com sucesso!'
         ], 200);
     }
+
+    public function listarCategorias()
+    {
+        $categorias = $this->produtoService->listarCategorias();
+
+        if ($categorias->isEmpty()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Categorias não encontradas'
+            ], 404);
+        }
+
+        return response()->json([
+            'success' => true,
+            'categorias' => $categorias
+        ], 200);
+    }
 }

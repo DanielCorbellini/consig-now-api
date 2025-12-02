@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Produto;
+use App\Models\CategoriasProduto;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 
@@ -44,5 +45,10 @@ class ProdutoService
         $produto->update($data);
 
         return $this->baseSearchQuery()->find($id);
+    }
+
+    public function listarCategorias(): Collection
+    {
+        return CategoriasProduto::all();
     }
 }
