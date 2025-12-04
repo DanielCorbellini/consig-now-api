@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Produto;
 
+use Illuminate\Database\QueryException;
 use RuntimeException;
 use App\Services\ProdutoService;
 use App\Http\Controllers\Controller;
@@ -90,19 +91,26 @@ class ProdutoController extends Controller
 
     public function destroy(int $id)
     {
-        $deleted = $this->produtoService->deletarProduto($id);
+        try {
+            $deleted = $this->produtoService->deletarProduto($id);
 
-        if (!$deleted) {
+            if (!$deleted) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Não foi possível deletar o produto ou ele não existe'
+                ], 404);
+            }
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Produto deletado com sucesso!'
+            ], 200);
+        } catch (QueryException $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Não foi possível deletar o produto ou ele não existe'
-            ], 404);
+                'message' => 'Não é possível deletar o produto, ele já está registrado em um estoque'
+            ], 500);
         }
-
-        return response()->json([
-            'success' => true,
-            'message' => 'Produto deletado com sucesso!'
-        ], 200);
     }
 
     public function listarCategorias()

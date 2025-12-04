@@ -43,7 +43,7 @@ class VendaItemService
 
     public function listar(int $vendaId): ?Collection
     {
-        return VendaItem::where('venda_id', $vendaId)->get();
+        return VendaItem::where('venda_id', $vendaId)->with('produto')->get();
     }
 
     public function remover(int $vendaId, int $vendaItemId): bool

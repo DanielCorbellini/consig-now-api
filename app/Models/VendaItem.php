@@ -20,4 +20,9 @@ class VendaItem extends Model
     {
         return $this->belongsTo(Venda::class, "id");
     }
+
+    public function produto(): BelongsTo
+    {
+        return $this->belongsTo(Produto::class, "produto_id");
+    }
 }
