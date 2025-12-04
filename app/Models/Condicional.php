@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Condicional extends Model
 {
-    protected  $fillable = [
+    protected $fillable = [
         "representante_id",
         "data_entrega",
         "data_prevista_retorno",
@@ -50,7 +50,7 @@ class Condicional extends Model
             ->join('users', 'representantes.user_id', '=', 'users.id');
 
         $query->when($filtros['representante_id'] ?? null, fn($q, $representanteId) => $q->where('condicionais.representante_id', $representanteId));
-        $query->when($filtros['user_name'] ?? null, fn($q, $representanteNome) => $q->where('users.name', 'like', "%{$representanteNome}%"));
+        $query->when($filtros['user_name'] ?? null, fn($q, $representanteNome) => $q->where('users.name', 'ilike', "%{$representanteNome}%"));
         $query->when($filtros['status'] ?? null, fn($q, $status) => $q->where('condicionais.status', $status));
 
         if (!empty($filtros['data_entrega_inicial']) && !empty($filtros['data_entrega_final'])) {
