@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Estoque;
 
 use App\Http\Controllers\Controller;
 use App\Services\EstoqueService;
+use Exception;
 use Illuminate\Http\Request;
 
 class EstoqueController extends Controller
@@ -18,21 +19,30 @@ class EstoqueController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $estoques = $this->estoqueService->listar();
+        try {
 
-        if ($estoques->isEmpty()) {
+            $filtros = $request->only(['usuario_id']);
+            $estoques = $this->estoqueService->listarComProduto($filtros);
+
+            if ($estoques->isEmpty()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Estoques não encontrados'
+                ], 404);
+            }
+
+            return response()->json([
+                'success' => true,
+                'stocks' => $estoques
+            ]);
+        } catch (Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Estoques não encontrados'
-            ], 404);
+                'message' => $e->getMessage()
+            ], 500);
         }
-
-        return response()->json([
-            'success' => true,
-            'stocks' => $estoques
-        ]);
     }
 
     /**
