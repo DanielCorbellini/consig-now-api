@@ -13,12 +13,13 @@ class VendasService
 
     public function listar(array $filtros = [])
     {
-        return Venda::filtrar($filtros)->get();
+        $vendas = Venda::filtrar($filtros)->get();
+        return $vendas->load('representante.user');
     }
 
     public function listarPorId(int $id)
     {
-        return Venda::find($id);
+        return Venda::find($id)->load('representante.user');
     }
 
     public function listarItensPorId(int $id)
