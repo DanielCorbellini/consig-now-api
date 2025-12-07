@@ -170,7 +170,7 @@ class CondicionalController extends Controller
         $message = [
             'item_id.required' => 'O campo item_id é obrigatório.',
             'item_id.integer' => 'O campo item_id deve ser um número inteiro.',
-            'item_id.exists' => 'O item especificado não existe na condicional.',
+            // 'item_id.exists' => 'O item especificado não existe na condicional.',
             'quantidade.required' => 'O campo quantidade é obrigatório.',
             'quantidade.integer' => 'O campo quantidade deve ser um número inteiro.',
             'quantidade.min' => 'A quantidade mínima para devolução é 1.',

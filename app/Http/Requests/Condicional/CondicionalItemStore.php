@@ -56,7 +56,7 @@ class CondicionalItemStore extends FormRequest
 
             'quantidade_vendida.integer' => 'O campo quantidade_vendida deve ser um número inteiro.',
             'quantidade_vendida.lte' => 'O campo quantidade_vendida deve ser menor ou igual a quantidade_entregue.',
-            'quantidade_entregue.min' => 'O campo quantidade_entregue deve ser no mínimo 0'
+            'quantidade_vendida.min' => 'O campo quantidade_vendida deve ser no mínimo 0'
         ];
     }
 }
