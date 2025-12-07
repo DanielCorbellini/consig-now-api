@@ -163,7 +163,7 @@ class CondicionalController extends Controller
     public function returnItems(Request $request, int $id)
     {
         $rules = [
-            'item_id' => 'required|integer|exists:condicional_itens,id',
+            'item_id' => 'required|integer|exists:condicional_itens,produto_id',
             'quantidade' => 'required|integer|min:1',
         ];
 
