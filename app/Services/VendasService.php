@@ -3,6 +3,8 @@
 namespace App\Services;
 
 use App\Models\Venda;
+use App\Models\Representante;
+use Illuminate\Support\Facades\Auth;
 
 class VendasService
 {
@@ -13,6 +15,15 @@ class VendasService
 
     public function listar(array $filtros = [])
     {
+        // If user is a representante, filter by their representante_id
+        $user = Auth::user();
+        if ($user && $user->perfil !== 'admin') {
+            $representante = Representante::where('user_id', $user->id)->first();
+            if ($representante) {
+                $filtros['representante_id'] = $representante->id;
+            }
+        }
+
         $vendas = Venda::filtrar($filtros)->get();
         return $vendas->load('representante.user');
     }

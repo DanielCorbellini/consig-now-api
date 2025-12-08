@@ -11,7 +11,7 @@ class ProdutoService
 {
     private function baseSearchQuery(): Builder
     {
-        return Produto::select('id', 'descricao', 'preco_custo', 'preco_venda', 'categoria_id')
+        return Produto::select('id', 'descricao', 'preco_custo', 'preco_venda', 'categoria_id')->orderBy('id', 'asc')
             ->with('categoria:id,descricao');
     }
 

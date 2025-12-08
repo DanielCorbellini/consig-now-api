@@ -21,7 +21,7 @@ class AuthController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|unique:users',
             'password' => 'required|string|min:6',
-            'perfil' =>  'required|in:admin,representante',
+            'perfil' => 'required|in:admin,representante',
         ]);
 
         $user = $this->authService->register($validatedUser);
@@ -63,7 +63,14 @@ class AuthController extends Controller
 
     public function profile(Request $request)
     {
-        return response()->json($request->user(), 200);
+        $user = $request->user();
+
+        // Load representante with almoxarifado if user is a representante
+        if ($user->perfil === 'representante') {
+            $user->load('representante.almoxarifado');
+        }
+
+        return response()->json($user, 200);
     }
 
     public function logout(Request $request)

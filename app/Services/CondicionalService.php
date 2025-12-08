@@ -6,6 +6,7 @@ use Exception;
 use App\Models\Estoque;
 use App\Models\Condicional;
 use App\Models\CondicionalItem;
+use App\Models\Representante;
 use Illuminate\Support\Facades\DB;
 use App\Models\MovimentacoesEstoque;
 use Illuminate\Support\Facades\Auth;
@@ -20,6 +21,15 @@ class CondicionalService
 
     public function listar(array $filtros = []): Collection
     {
+        // If user is a representante, filter by their representante_id
+        $user = Auth::user();
+        if ($user && $user->perfil !== 'admin') {
+            $representante = Representante::where('user_id', $user->id)->first();
+            if ($representante) {
+                $filtros['representante_id'] = $representante->id;
+            }
+        }
+
         return Condicional::comRepresentante($filtros)->get();
     }
 

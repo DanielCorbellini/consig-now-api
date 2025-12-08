@@ -6,6 +6,7 @@ use Exception;
 use App\Models\Estoque;
 use App\Models\Almoxarifado;
 use App\Models\Representante;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Collection;
 
 class EstoqueService
@@ -17,7 +18,23 @@ class EstoqueService
 
     public function listar(): Collection
     {
-        return Estoque::all();
+        $user = Auth::user();
+
+        // If user is a representante, filter by their almoxarifado
+        if ($user && $user->perfil !== 'admin') {
+            $representante = Representante::where('user_id', $user->id)->first();
+            if ($representante) {
+                $almoxarifado = Almoxarifado::where('representante_id', $representante->id)->first();
+                if ($almoxarifado) {
+                    return Estoque::where('almoxarifado_id', $almoxarifado->id)
+                        ->with(['produto', 'produto.categoria', 'almoxarifado'])
+                        ->get();
+                }
+            }
+        }
+
+        // Admin sees all
+        return Estoque::with(['produto', 'produto.categoria', 'almoxarifado'])->get();
     }
 
     public function listarPorId(int $id)

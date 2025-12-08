@@ -64,4 +64,9 @@ class User extends Authenticatable
             }
         });
     }
+
+    public function representante()
+    {
+        return $this->hasOne(Representante::class, 'user_id');
+    }
 }
